@@ -1,8 +1,6 @@
 package main
 
-import "fmt"
-
-var pMap = map[byte]byte{
+var pMap = map[uint8]uint8{
 	40:  41,  // ()
 	123: 125, // {}
 	91:  93,  // []
@@ -14,7 +12,7 @@ type Stack struct {
 }
 
 type Node struct {
-	value byte
+	value uint8
 	prev  *Node
 }
 
@@ -23,7 +21,6 @@ func NewStack() *Stack {
 }
 
 func (this *Stack) Pop() *Node {
-	fmt.Println("Call Pop")
 	if this.length <= 0 {
 		return nil
 	}
@@ -34,8 +31,7 @@ func (this *Stack) Pop() *Node {
 	return n
 }
 
-func (this *Stack) Push(v byte) {
-	fmt.Println("Call Push")
+func (this *Stack) Push(v uint8) {
 	n := &Node{v, this.top}
 	this.top = n
 	this.length++
@@ -44,15 +40,25 @@ func (this *Stack) Push(v byte) {
 func isValid(s string) bool {
 	stack := NewStack()
 	for i := 0; i < len(s); i++ {
+		// Close Parenthese
+		if stack.length <= 0 && (s[i] == 41 || s[i] == 125 || s[i] == 93) {
+			return false
+		}
+		if stack.length > 0 {
+			open := stack.top.value
+			if pMap[open] == s[i] {
+				stack.Pop()
+				continue
+			}
+			if open == 40 && s[i] == 125 || open == 40 && s[i] == 93 || open == 123 && s[i] == 41 || open == 123 && s[i] == 93 || (open == 91 && s[i] == 41) || (open == 91 && s[i] == 125) {
+				return false
+			}
+		}
 		// Open Parenthse
 		if s[i] == 40 || s[i] == 123 || s[i] == 91 {
 			stack.Push(s[i])
+			continue
 		}
-		// Close Parenthese
-		if stack.length > 0 && stack.top.value == pMap[s[i]] {
-			stack.Pop()
-		}
-		fmt.Println(stack)
 	}
 	return stack.length == 0
 }
