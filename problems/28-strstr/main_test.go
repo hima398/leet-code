@@ -17,3 +17,15 @@ func TestStrStr(t *testing.T) {
 		assert.Equal(t, 0, strStr("", ""))
 	})
 }
+
+func BenchmarkStrStr(b *testing.B) {
+	n := 50000
+	buf := make([]byte, n)
+	for i := 0; i < n; i++ {
+		buf[i] = 97
+	}
+	haystack := string(buf)
+	for i := 0; i < b.N; i++ {
+		strStr(haystack, "b")
+	}
+}
