@@ -24,4 +24,13 @@ func TestBuddyStrings(t *testing.T) {
 	t.Run("Example 5", func(t *testing.T) {
 		assert.Equal(t, false, buddyStrings("", "aa"))
 	})
+	t.Run("Example 6", func(t *testing.T) {
+		assert.Equal(t, false, buddyStrings("", ""))
+	})
+	t.Run("Example 7", func(t *testing.T) {
+		assert.Equal(t, false, buddyStrings("a", "a"))
+	})
+	t.Run("Example 8", func(t *testing.T) {
+		assert.Equal(t, false, buddyStrings("abcaa", "abcbb"))
+	})
 }
